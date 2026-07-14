@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Zap, LayoutGrid, Map, Users, AlertTriangle, Sun, Bell, UserCircle, Menu, X, MapPin, Settings, HelpCircle, Search } from 'lucide-react'
+import { Zap, LayoutGrid, Map, Users, AlertTriangle, Sun, Bell, UserCircle, Menu, X, MapPin, Settings, HelpCircle, Search, Wrench, Calendar, Bot, LineChart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/components/AuthProvider'
 
@@ -22,6 +22,10 @@ export default function DashboardLayout({
     { icon: Users, label: 'Communities', href: '/dashboard/community' },
     { icon: AlertTriangle, label: 'Report Power', href: '/dashboard/report' },
     { icon: Sun, label: 'SolarBulk', href: '/dashboard/solarbulk' },
+    { icon: Wrench, label: 'PowerConnect', href: '/dashboard/electricians' },
+    { icon: Calendar, label: 'Bookings', href: '/dashboard/bookings' },
+    { icon: Bot, label: 'AI Assistant', href: '/dashboard/ai-assistant' },
+    { icon: LineChart, label: 'Analytics', href: '/dashboard/analytics' },
     { icon: Bell, label: 'Notifications', href: '/dashboard/notifications' },
     { icon: UserCircle, label: 'Profile', href: '/dashboard/profile' },
   ]
