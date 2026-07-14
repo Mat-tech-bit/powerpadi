@@ -1,221 +1,140 @@
 'use client'
 
-import { useState } from 'react'
+import { DollarSign, Star, Briefcase, Clock, TrendingUp, Calendar as CalendarIcon, CheckCircle2, ChevronRight } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Wrench, Calendar, User, Phone, MapPin, Clock, CheckCircle, AlertCircle, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
-interface ServiceTicket {
-  id: string
-  client: string
-  service: string
-  location: string
-  scheduledDate: string
-  status: 'pending' | 'assigned' | 'completed' | 'cancelled'
-  priority: 'low' | 'medium' | 'high'
-  rating?: number
-}
+export default function TechnicianOverview() {
+  const stats = [
+    { label: 'Monthly Earnings', value: '₦450,000', trend: '+12%', icon: DollarSign, color: 'text-green-500', bg: 'bg-green-500/10' },
+    { label: 'Completed Jobs', value: '342', trend: '+8', icon: CheckCircle2, color: 'text-primary', bg: 'bg-primary/10' },
+    { label: 'Average Rating', value: '4.9', trend: 'Top 5%', icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
+    { label: 'Response Time', value: '14 mins', trend: '-2 mins', icon: Clock, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+  ]
 
-export default function TechnicianDashboard() {
-  const [tickets, setTickets] = useState<ServiceTicket[]>([
-    {
-      id: 'TK001',
-      client: 'Adekunle Adeyemi',
-      service: 'Solar Panel Installation',
-      location: 'Victoria Island',
-      scheduledDate: 'Today, 2:30 PM',
-      status: 'assigned',
-      priority: 'high',
-    },
-    {
-      id: 'TK002',
-      client: 'Chioma Williams',
-      service: 'Inverter Replacement',
-      location: 'Ikoyi',
-      scheduledDate: 'Tomorrow, 10:00 AM',
-      status: 'pending',
-      priority: 'medium',
-    },
-    {
-      id: 'TK003',
-      client: 'David Okafor',
-      service: 'System Maintenance',
-      location: 'Lekki',
-      scheduledDate: 'Dec 25, 9:00 AM',
-      status: 'pending',
-      priority: 'low',
-    },
-    {
-      id: 'TK004',
-      client: 'Ayesha Malik',
-      service: 'Battery Installation',
-      location: 'VI',
-      scheduledDate: 'Dec 22, 3:00 PM',
-      status: 'completed',
-      priority: 'medium',
-      rating: 5,
-    },
-  ])
+  const todaySchedule = [
+    { id: '1', time: '10:00 AM', customer: 'Kenneth O.', service: 'Inverter Servicing', location: '12 Admiralty Way', status: 'Next' },
+    { id: '2', time: '02:00 PM', customer: 'Sarah A.', service: 'Solar Panel Inspection', location: '24 Broad St', status: 'Upcoming' },
+  ]
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-500/20 text-yellow-600'
-      case 'assigned':
-        return 'bg-blue-500/20 text-blue-600'
-      case 'completed':
-        return 'bg-green-500/20 text-green-600'
-      case 'cancelled':
-        return 'bg-red-500/20 text-red-600'
-      default:
-        return 'bg-gray-500/20 text-gray-600'
-    }
-  }
-
-  const getPriorityIcon = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return <AlertCircle className="w-4 h-4 text-red-500" />
-      case 'medium':
-        return <AlertCircle className="w-4 h-4 text-yellow-500" />
-      case 'low':
-        return <AlertCircle className="w-4 h-4 text-blue-500" />
-      default:
-        return null
-    }
-  }
+  const recentRequests = [
+    { id: 'Req-112', customer: 'Tunde M.', service: 'Emergency Fault Repair', time: '10 mins ago', urgent: true },
+    { id: 'Req-113', customer: 'Chioma B.', service: 'House Wiring Assessment', time: '1 hr ago', urgent: false },
+  ]
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
-              <Wrench className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Technician Dashboard</h1>
-              <p className="text-sm text-muted-foreground">Manage your service requests and projects</p>
-            </div>
-          </div>
-          <Link href="/">
-            <Button variant="outline">Back to Home</Button>
-          </Link>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
-        {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6">
-          <div className="bg-card border border-border rounded-lg p-6">
-            <p className="text-sm text-muted-foreground mb-2">Active Tickets</p>
-            <p className="text-3xl font-bold text-primary">3</p>
-          </div>
-          <div className="bg-card border border-border rounded-lg p-6">
-            <p className="text-sm text-muted-foreground mb-2">Completed This Month</p>
-            <p className="text-3xl font-bold text-secondary">12</p>
-          </div>
-          <div className="bg-card border border-border rounded-lg p-6">
-            <p className="text-sm text-muted-foreground mb-2">Average Rating</p>
-            <p className="text-3xl font-bold text-accent">4.8/5</p>
-          </div>
-          <div className="bg-card border border-border rounded-lg p-6">
-            <p className="text-sm text-muted-foreground mb-2">Monthly Earnings</p>
-            <p className="text-3xl font-bold text-foreground">₦245K</p>
-          </div>
-        </div>
-
-        {/* Service Tickets */}
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-6">Service Requests</h2>
+          <h1 className="text-3xl font-bold text-foreground">Dashboard Overview</h1>
+          <p className="text-muted-foreground mt-1">Here is what is happening with your business today.</p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" className="border-border">Download Report</Button>
+        </div>
+      </div>
 
-          <div className="space-y-4">
-            {tickets.map((ticket) => (
-              <div key={ticket.id} className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-semibold text-muted-foreground">{ticket.id}</span>
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${getStatusColor(ticket.status)}`}>
-                        {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
-                      </span>
-                      <div className="flex items-center gap-1">
-                        {getPriorityIcon(ticket.priority)}
-                        <span className="text-xs text-muted-foreground capitalize">{ticket.priority}</span>
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-semibold text-foreground">{ticket.service}</h3>
-                  </div>
+      {/* Stats Grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, i) => (
+          <Card key={i} className="bg-card border-border hover:border-primary/30 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">{stat.label}</p>
+                  <h3 className="text-3xl font-bold text-foreground">{stat.value}</h3>
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-foreground">{ticket.client}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">{ticket.location}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-foreground">{ticket.scheduledDate}</span>
-                    </div>
-                    {ticket.status === 'completed' && ticket.rating && (
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: ticket.rating }).map((_, i) => (
-                          <span key={i} className="text-yellow-500">★</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  {ticket.status === 'pending' && (
-                    <Button size="sm">Accept Job</Button>
-                  )}
-                  {ticket.status === 'assigned' && (
-                    <>
-                      <Button size="sm" variant="outline">Update Status</Button>
-                      <Button size="sm">Start Navigation</Button>
-                    </>
-                  )}
-                  {ticket.status === 'completed' && (
-                    <Button size="sm" variant="outline" disabled>Completed</Button>
-                  )}
-                  <Button size="sm" variant="outline">View Details</Button>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.bg}`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="mt-4 flex items-center gap-1.5 text-sm">
+                <TrendingUp className="w-4 h-4 text-green-500" />
+                <span className="text-green-500 font-medium">{stat.trend}</span>
+                <span className="text-muted-foreground">vs last month</span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Today's Schedule */}
+        <div className="lg:col-span-2 space-y-6">
+          <Card className="bg-card border-border">
+            <div className="p-6 border-b border-border flex items-center justify-between">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                <CalendarIcon className="w-5 h-5 text-primary" /> Today's Schedule
+              </h2>
+              <Link href="/technician/calendar" className="text-sm text-primary hover:underline font-medium">View Full Calendar</Link>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {todaySchedule.map((job) => (
+                  <div key={job.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-border bg-background/50 hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className={`px-3 py-1.5 rounded-lg text-sm font-bold text-center min-w-[90px] ${job.status === 'Next' ? 'bg-primary text-black' : 'bg-muted text-foreground'}`}>
+                        {job.time}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-foreground">{job.service}</h4>
+                        <p className="text-sm text-muted-foreground">For {job.customer} • {job.location}</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" className="shrink-0 border-border bg-background hover:bg-muted">
+                      Start Job
+                    </Button>
+                  </div>
+                ))}
+                {todaySchedule.length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <p>No jobs scheduled for today.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Card>
+
+          {/* Performance Chart Placeholder */}
+          <Card className="bg-card border-border h-[300px] flex items-center justify-center p-6">
+             <div className="text-center">
+               <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+               <h3 className="font-bold text-foreground mb-2">Revenue Analytics Chart</h3>
+               <p className="text-sm text-muted-foreground">Your detailed performance metrics will appear here.</p>
+             </div>
+          </Card>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-card border border-border rounded-lg p-6">
-            <h3 className="font-semibold text-foreground mb-4">Profile Setup</h3>
-            <p className="text-sm text-muted-foreground mb-4">Complete your technician profile to get more jobs</p>
-            <Button variant="outline" className="w-full" size="sm">Edit Profile</Button>
-          </div>
-
-          <div className="bg-card border border-border rounded-lg p-6">
-            <h3 className="font-semibold text-foreground mb-4">Certifications</h3>
-            <p className="text-sm text-muted-foreground mb-4">Verify your skills and increase customer trust</p>
-            <Button variant="outline" className="w-full" size="sm">Add Certificates</Button>
-          </div>
-
-          <div className="bg-card border border-border rounded-lg p-6">
-            <h3 className="font-semibold text-foreground mb-4">Earnings</h3>
-            <p className="text-sm text-muted-foreground mb-4">Track your income and withdrawals</p>
-            <Button variant="outline" className="w-full" size="sm">View Earnings</Button>
-          </div>
+        {/* Sidebar Widgets */}
+        <div className="space-y-6">
+          {/* Incoming Requests */}
+          <Card className="bg-card border-border">
+            <div className="p-6 border-b border-border flex items-center justify-between">
+              <h2 className="font-bold text-foreground">New Requests <span className="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-full ml-1">2</span></h2>
+            </div>
+            <div className="p-0">
+              <div className="divide-y divide-border">
+                {recentRequests.map((req) => (
+                  <div key={req.id} className="p-4 hover:bg-muted/20 transition-colors">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs text-muted-foreground">{req.time}</span>
+                      {req.urgent && <span className="text-[10px] uppercase tracking-wider font-bold text-white bg-red-500 px-1.5 py-0.5 rounded">Urgent</span>}
+                    </div>
+                    <h4 className="font-bold text-foreground mb-1">{req.service}</h4>
+                    <p className="text-sm text-muted-foreground mb-3">{req.customer}</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-primary text-black hover:bg-primary/90 h-8 text-xs font-bold shadow-[0_0_10px_rgba(229,195,135,0.3)]">Accept</Button>
+                      <Button variant="outline" className="flex-1 h-8 text-xs border-border bg-transparent">Decline</Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link href="/technician/requests" className="block text-center text-sm font-medium text-primary hover:text-white p-4 border-t border-border transition-colors">
+                View All Requests
+              </Link>
+            </div>
+          </Card>
         </div>
       </div>
     </div>

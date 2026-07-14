@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Phone, MessageCircle, Droplets, Map, Sparkles, Users, Zap, CheckCircle2, Home, Briefcase, Globe, BarChart3, ChevronRight, Sun } from 'lucide-react'
+import { ArrowRight, Phone, MessageCircle, Droplets, Map, Sparkles, Users, Zap, CheckCircle2, Home, Briefcase, Globe, BarChart3, ChevronRight, Sun, Menu, X } from 'lucide-react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -20,7 +20,11 @@ const staggerContainer = {
   }
 }
 
+import { useState } from 'react'
+
 export default function LandingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-[#0B0F19] text-white selection:bg-primary/30 overflow-hidden">
       {/* Navigation */}
@@ -38,24 +42,65 @@ export default function LandingPage() {
             <span className="text-xl font-bold text-white tracking-tight">PowerPadi</span>
           </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-            <Link href="#features" className="hover:text-white transition-colors">Features</Link>
-            <Link href="#how-it-works" className="hover:text-white transition-colors">How it Works</Link>
-            <Link href="#solarbulk" className="hover:text-white transition-colors">SolarBulk</Link>
-            <Link href="#" className="hover:text-white transition-colors">News</Link>
+          <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-muted-foreground">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <Link href="/dashboard/map" className="hover:text-white transition-colors">PowerWatch</Link>
+            <Link href="/dashboard/solarbulk" className="hover:text-white transition-colors">SolarBulk</Link>
+            <Link href="/powerconnect" className="text-primary font-bold hover:text-primary/80 transition-colors">PowerConnect</Link>
+            <Link href="/dashboard/community" className="hover:text-white transition-colors">Community</Link>
+            <Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/signin">
-              <Button variant="ghost" className="text-white hover:bg-[#1A1D24] hover:text-white">Sign In</Button>
-            </Link>
-            <Link href="/signup">
-              <Button className="bg-primary text-black hover:bg-primary/90 font-bold rounded-lg px-6">
-                Get Started
-              </Button>
-            </Link>
+            <div className="hidden md:flex items-center gap-4">
+              <Link href="/signin">
+                <Button variant="ghost" className="text-white hover:bg-[#1A1D24] hover:text-white">Sign In</Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="bg-primary text-black hover:bg-primary/90 font-bold rounded-lg px-6">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="md:hidden text-white p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-[#0B0F19] border-b border-[#1F2937] overflow-hidden"
+            >
+              <div className="flex flex-col px-6 py-4 space-y-4 text-sm font-medium text-muted-foreground">
+                <Link href="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">Home</Link>
+                <Link href="/dashboard/map" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">PowerWatch</Link>
+                <Link href="/dashboard/solarbulk" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">SolarBulk</Link>
+                <Link href="/powerconnect" onClick={() => setMobileMenuOpen(false)} className="text-primary font-bold">PowerConnect</Link>
+                <Link href="/dashboard/community" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">Community</Link>
+                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">Dashboard</Link>
+                <div className="pt-4 border-t border-[#1F2937] flex flex-col gap-3">
+                  <Link href="/signin" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="outline" className="w-full text-white border-[#1F2937] bg-transparent">Sign In</Button>
+                  </Link>
+                  <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
+                    <Button className="w-full bg-primary text-black font-bold">Get Started</Button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* Hero Section */}

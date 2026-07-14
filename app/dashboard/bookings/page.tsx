@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Calendar, Clock, MapPin, Search, Plus, User, FileText } from 'lucide-react'
+import Link from 'next/link'
+import { Calendar, Clock, MapPin, Search, Plus, User, FileText, Star, Navigation } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -13,7 +14,7 @@ const mockBookings = [
     service: 'Inverter Servicing',
     date: 'Oct 24, 2024',
     time: '10:00 AM',
-    status: 'Upcoming',
+    status: 'In Progress',
     location: '12 Admiralty Way, Lekki',
     price: '₦15,000'
   },
@@ -25,7 +26,8 @@ const mockBookings = [
     time: '2:00 PM',
     status: 'Completed',
     location: '45 Broad St, Lagos Island',
-    price: '₦25,000'
+    price: '₦25,000',
+    rated: false
   },
   {
     id: 'B-0832',
@@ -35,15 +37,16 @@ const mockBookings = [
     time: '9:30 AM',
     status: 'Completed',
     location: 'Home Address',
-    price: '₦12,500'
+    price: '₦12,500',
+    rated: true
   }
 ]
 
 export default function BookingsPage() {
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming')
+  const [activeTab, setActiveTab] = useState<'active' | 'past'>('active')
 
   const filteredBookings = mockBookings.filter(b => 
-    activeTab === 'upcoming' ? b.status === 'Upcoming' : b.status === 'Completed'
+    activeTab === 'active' ? (b.status === 'Upcoming' || b.status === 'In Progress') : b.status === 'Completed'
   )
 
   return (
@@ -51,12 +54,14 @@ export default function BookingsPage() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground">My Bookings</h1>
-          <p className="text-muted-foreground mt-1">Manage your appointments with electricians and vendors.</p>
+          <p className="text-muted-foreground mt-1">Manage your appointments, track active jobs, and review past services.</p>
         </div>
-        <Button className="bg-primary text-black hover:bg-primary/90 font-semibold gap-2">
-          <Plus className="w-4 h-4" />
-          New Booking
-        </Button>
+        <Link href="/dashboard/electricians">
+          <Button className="bg-primary text-black hover:bg-primary/90 font-semibold gap-2">
+            <Plus className="w-4 h-4" />
+            New Booking
+          </Button>
+        </Link>
       </div>
 
       <div className="bg-card border border-border rounded-xl p-6">
@@ -64,10 +69,10 @@ export default function BookingsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="flex bg-background border border-border rounded-lg p-1 w-full sm:w-auto">
             <button 
-              className={`flex-1 sm:flex-none px-6 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'upcoming' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
-              onClick={() => setActiveTab('upcoming')}
+              className={`flex-1 sm:flex-none px-6 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'active' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
+              onClick={() => setActiveTab('active')}
             >
-              Upcoming
+              Active Bookings
             </button>
             <button 
               className={`flex-1 sm:flex-none px-6 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'past' ? 'bg-primary text-black' : 'text-muted-foreground hover:text-foreground'}`}
@@ -99,7 +104,7 @@ export default function BookingsPage() {
                   <div>
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="font-bold text-foreground text-lg">{booking.service}</h3>
-                      <Badge variant="outline" className={booking.status === 'Upcoming' ? 'text-blue-500 border-blue-500/30 bg-blue-500/10' : 'text-green-500 border-green-500/30 bg-green-500/10'}>
+                      <Badge variant="outline" className={booking.status === 'In Progress' ? 'text-orange-500 border-orange-500/30 bg-orange-500/10 animate-pulse' : booking.status === 'Upcoming' ? 'text-blue-500 border-blue-500/30 bg-blue-500/10' : 'text-green-500 border-green-500/30 bg-green-500/10'}>
                         {booking.status}
                       </Badge>
                     </div>
@@ -115,13 +120,23 @@ export default function BookingsPage() {
                 <div className="flex md:flex-col items-center md:items-end justify-between gap-4 border-t md:border-t-0 border-border pt-4 md:pt-0">
                   <div className="text-lg font-bold text-foreground">{booking.price}</div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="border-border">
-                      <FileText className="w-4 h-4 mr-2" /> Details
-                    </Button>
-                    {booking.status === 'Upcoming' && (
-                      <Button variant="outline" size="sm" className="border-destructive/50 text-destructive hover:bg-destructive hover:text-white">
-                        Reschedule
-                      </Button>
+                    {booking.status === 'In Progress' || booking.status === 'Upcoming' ? (
+                      <Link href={`/dashboard/bookings/${booking.id}`}>
+                        <Button className="bg-primary text-black hover:bg-primary/90 shadow-[0_0_15px_rgba(229,195,135,0.3)]">
+                          <Navigation className="w-4 h-4 mr-2" /> Track Job
+                        </Button>
+                      </Link>
+                    ) : (
+                      <>
+                        <Button variant="outline" size="sm" className="border-border">
+                          <FileText className="w-4 h-4 mr-2" /> Invoice
+                        </Button>
+                        {!booking.rated && (
+                          <Button variant="outline" size="sm" className="border-primary/50 text-primary hover:bg-primary hover:text-black">
+                            <Star className="w-4 h-4 mr-2" /> Rate Provider
+                          </Button>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -134,9 +149,11 @@ export default function BookingsPage() {
               <p className="text-muted-foreground max-w-sm mx-auto mb-6">
                 You don't have any {activeTab} appointments scheduled at the moment.
               </p>
-              <Button className="bg-primary text-black hover:bg-primary/90 font-semibold">
-                Find an Electrician
-              </Button>
+              <Link href="/dashboard/electricians">
+                <Button className="bg-primary text-black hover:bg-primary/90 font-semibold">
+                  Find an Electrician
+                </Button>
+              </Link>
             </div>
           )}
         </div>
