@@ -2,181 +2,234 @@
 
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/components/AuthProvider'
-import { AlertCircle, MapPin, BarChart3, Clock, TrendingUp, Zap, CheckCircle, AlertTriangle } from 'lucide-react'
+import { 
+  AlertTriangle, Map, Users, Sun, Sparkles, 
+  CheckCircle2, AlertCircle, TrendingUp, Activity,
+  Clock, ArrowUpRight
+} from 'lucide-react'
 import Link from 'next/link'
 
 export default function DashboardPage() {
   const { userData } = useAuth()
-  const firstName = userData?.fullName?.split(' ')[0] || 'User'
-  const currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-  const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  const firstName = userData?.fullName?.split(' ')[0] || 'Adekunle'
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="space-y-6 lg:space-y-8">
       {/* Greeting */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Good Morning, {firstName}</h1>
-        <p className="text-muted-foreground">Here&apos;s the latest electricity update for your community.</p>
+      <div>
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 flex items-center gap-2">
+          Good Morning, {firstName} <span className="text-3xl">👋</span>
+        </h1>
+        <p className="text-muted-foreground text-sm sm:text-base">
+          Here's the latest electricity update for your community.
+        </p>
       </div>
 
-      {/* Current Status */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Main Status Card */}
-        <div className="lg:col-span-2 bg-card border border-border rounded-lg p-8">
-          <div className="flex items-start justify-between mb-8">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground mb-2">Victoria Island, Hub</p>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
-                <p className="text-4xl font-bold text-primary">ON</p>
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">Current Status</p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">{currentDate}</p>
-              <p className="text-lg font-semibold text-foreground">{currentTime}</p>
-            </div>
+      {/* Top Cards Grid */}
+      <div className="grid lg:grid-cols-5 gap-6">
+        
+        {/* Primary Location */}
+        <div className="lg:col-span-3 bg-[#161B22] border border-[#1F2937] rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden group">
+          <div className="flex items-start justify-between mb-8 relative z-10">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              Primary Location
+            </span>
+            <span className="bg-green-500/10 border border-green-500/20 text-green-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              Electricity Available
+            </span>
           </div>
 
-          <p className="text-foreground mb-4">Your grid is performing at peak capacity with no reported faults.</p>
+          <div className="relative z-10 mb-8">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">Victoria Island, Hub</h2>
+          </div>
 
-          <div className="flex gap-3 flex-wrap">
-            <Link href="/dashboard/map">
-              <Button variant="outline">Open Live Map</Button>
-            </Link>
-            <Button>Report Power</Button>
+          <div className="space-y-2 relative z-10">
+            <p className="text-sm text-muted-foreground flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              Last updated 2 minutes ago
+            </p>
+            <p className="text-sm font-semibold text-white flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-500" />
+              Confirmed by 18 community reports
+            </p>
+          </div>
+          
+          {/* Decorative background blur */}
+          <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-green-500/10 blur-[100px] rounded-full pointer-events-none group-hover:bg-green-500/20 transition-colors duration-700" />
+        </div>
+
+        {/* AI Prediction */}
+        <div className="lg:col-span-2 bg-gradient-to-br from-[#161B22] to-[#1A1D24] border border-[#2B303B] rounded-2xl p-6 md:p-8 shadow-[0_0_25px_rgba(229,195,135,0.03)] flex flex-col justify-between">
+          <div className="flex items-center gap-2 mb-6">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-xs font-bold text-primary uppercase tracking-wider">
+              AI Prediction
+            </span>
+          </div>
+
+          <h3 className="text-2xl sm:text-3xl font-bold text-white leading-tight mb-8">
+            Power is expected to remain available until <span className="text-primary">5:45 PM</span>.
+          </h3>
+
+          <div>
+            <div className="flex items-center justify-between text-sm mb-3">
+              <span className="text-muted-foreground font-medium">Confidence Level</span>
+              <span className="text-primary font-bold text-lg">89%</span>
+            </div>
+            <div className="h-2 w-full bg-[#2B303B] rounded-full overflow-hidden">
+              <div className="h-full bg-primary w-[89%] rounded-full shadow-[0_0_10px_rgba(229,195,135,0.5)]" />
+            </div>
           </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className="space-y-4">
-          <div className="bg-card border border-border rounded-lg p-6">
-            <p className="text-sm font-medium text-muted-foreground mb-2">Grid Reliability</p>
-            <p className="text-3xl font-bold text-primary mb-2">94%</p>
-            <p className="text-xs text-muted-foreground">Based on 24hr average</p>
-          </div>
-          <div className="bg-card border border-border rounded-lg p-6">
-            <p className="text-sm font-medium text-muted-foreground mb-2">Community Status</p>
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
-              <p className="text-lg font-semibold text-foreground">All Good</p>
-            </div>
-            <p className="text-xs text-muted-foreground">18 reports in area</p>
-          </div>
-        </div>
       </div>
 
-      {/* AI Prediction */}
-      <div className="bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-lg p-8">
-        <div className="flex items-start gap-4">
-          <div className="p-3 bg-primary/20 rounded-lg">
-            <TrendingUp className="w-6 h-6 text-primary" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-foreground mb-2">AI PREDICTION</h3>
-            <p className="text-foreground mb-4">Power is expected to remain available until <span className="font-semibold text-primary">5:45 PM</span>. Based on historical grid patterns and current hub stability.</p>
-            <div className="flex items-center gap-6 text-sm">
-              <div>
-                <p className="text-muted-foreground">Confidence Level</p>
-                <p className="text-2xl font-bold text-foreground">89%</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Community Reports</p>
-                <p className="text-2xl font-bold text-foreground">18</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Last Updated</p>
-                <p className="text-sm font-medium text-foreground">2 mins ago</p>
-              </div>
+      {/* Quick Actions Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <Link href="/dashboard/report">
+          <div className="bg-[#161B22] border border-[#1F2937] hover:border-primary/50 transition-colors rounded-2xl p-6 flex flex-col items-center justify-center text-center group h-full">
+            <div className="w-12 h-12 rounded-full bg-[#1A1D24] border border-[#2B303B] group-hover:bg-primary/10 flex items-center justify-center mb-4 transition-colors">
+              <AlertTriangle className="w-5 h-5 text-primary" />
             </div>
+            <h4 className="font-bold text-white text-sm mb-1">Report Power</h4>
           </div>
-        </div>
-      </div>
-
-      {/* Community Actions */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors cursor-pointer">
-          <AlertCircle className="w-8 h-8 text-primary mb-4" />
-          <h3 className="font-semibold text-foreground mb-2">Report Power</h3>
-          <p className="text-sm text-muted-foreground mb-4">Instantly notify neighbors of any outages or issues</p>
-          <Button variant="outline" size="sm" className="w-full">Report Now</Button>
-        </div>
-
-        <Link href="/dashboard/map" className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors">
-          <MapPin className="w-8 h-8 text-accent mb-4" />
-          <h3 className="font-semibold text-foreground mb-2">Open Live Map</h3>
-          <p className="text-sm text-muted-foreground mb-4">Real-time status view of electricity availability</p>
-          <Button variant="outline" size="sm" className="w-full">View Map</Button>
         </Link>
-
-        <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors cursor-pointer">
-          <Users2 className="w-8 h-8 text-secondary mb-4" />
-          <h3 className="font-semibold text-foreground mb-2">My Community</h3>
-          <p className="text-sm text-muted-foreground mb-4">Manage Mayfair Estate and community updates</p>
-          <Button variant="outline" size="sm" className="w-full">View</Button>
-        </div>
+        <Link href="/dashboard/map">
+          <div className="bg-[#161B22] border border-[#1F2937] hover:border-primary/50 transition-colors rounded-2xl p-6 flex flex-col items-center justify-center text-center group h-full">
+            <div className="w-12 h-12 rounded-full bg-[#1A1D24] border border-[#2B303B] group-hover:bg-primary/10 flex items-center justify-center mb-4 transition-colors">
+              <Map className="w-5 h-5 text-primary" />
+            </div>
+            <h4 className="font-bold text-white text-sm mb-1">Open Live Map</h4>
+          </div>
+        </Link>
+        <Link href="/dashboard/community">
+          <div className="bg-[#161B22] border border-[#1F2937] hover:border-primary/50 transition-colors rounded-2xl p-6 flex flex-col items-center justify-center text-center group h-full">
+            <div className="w-12 h-12 rounded-full bg-[#1A1D24] border border-[#2B303B] group-hover:bg-primary/10 flex items-center justify-center mb-4 transition-colors">
+              <Users className="w-5 h-5 text-primary" />
+            </div>
+            <h4 className="font-bold text-white text-sm mb-1">My Community</h4>
+          </div>
+        </Link>
+        <Link href="/dashboard/solarbulk">
+          <div className="bg-[#161B22] border border-[#1F2937] hover:border-primary/50 transition-colors rounded-2xl p-6 flex flex-col items-center justify-center text-center group h-full">
+            <div className="w-12 h-12 rounded-full bg-[#1A1D24] border border-[#2B303B] group-hover:bg-primary/10 flex items-center justify-center mb-4 transition-colors">
+              <Sun className="w-5 h-5 text-primary" />
+            </div>
+            <h4 className="font-bold text-white text-sm mb-1">SolarBulk</h4>
+          </div>
+        </Link>
       </div>
 
-      {/* Daily Power Timeline */}
-      <div className="bg-card border border-border rounded-lg p-8">
-        <h3 className="text-lg font-semibold text-foreground mb-6">Daily Power Timeline</h3>
-        <div className="space-y-4">
-          <div className="text-sm font-medium text-muted-foreground mb-4">TODAY</div>
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <Clock className="w-4 h-4 text-muted-foreground" />
-              <span>7:00 AM</span>
-            </div>
-            <div className="px-3 py-1 rounded bg-primary/20 text-primary text-xs font-medium">ON</div>
+      {/* Bottom Metrics Grid */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        
+        {/* Timeline */}
+        <div className="bg-[#161B22] border border-[#1F2937] rounded-2xl p-6 md:p-8 lg:row-span-2">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              Today's Timeline
+            </h3>
           </div>
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <Clock className="w-4 h-4 text-muted-foreground" />
-              <span>10:15 AM</span>
+          
+          <div className="relative pl-6 space-y-8 before:absolute before:inset-0 before:ml-[11px] before:w-0.5 before:bg-[#2B303B]">
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="absolute -left-[30px] w-4 h-4 rounded-full bg-green-500 border-4 border-[#161B22]" />
+              <span className="text-sm font-semibold text-white">7:00 AM</span>
+              <span className="text-xs font-bold text-green-500 uppercase tracking-wider">Power On</span>
             </div>
-            <div className="px-3 py-1 rounded bg-destructive/20 text-destructive text-xs font-medium">OFF</div>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <Clock className="w-4 h-4 text-muted-foreground" />
-              <span>12:40 PM</span>
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="absolute -left-[30px] w-4 h-4 rounded-full bg-red-500 border-4 border-[#161B22]" />
+              <span className="text-sm font-semibold text-white">10:15 AM</span>
+              <span className="text-xs font-bold text-red-500 uppercase tracking-wider">Power Off</span>
             </div>
-            <div className="px-3 py-1 rounded bg-primary/20 text-primary text-xs font-medium">ON</div>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <Clock className="w-4 h-4 text-muted-foreground" />
-              <span>5:45 PM</span>
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="absolute -left-[30px] w-4 h-4 rounded-full bg-green-500 border-4 border-[#161B22]" />
+              <span className="text-sm font-semibold text-white">12:40 PM</span>
+              <span className="text-xs font-bold text-green-500 uppercase tracking-wider">Power On</span>
             </div>
-            <div className="px-3 py-1 rounded bg-amber-500/20 text-amber-600 text-xs font-medium">EXP. OFF</div>
+            <div className="relative z-10 flex items-center justify-between mt-12 pt-6 border-t border-[#1F2937]">
+              <div className="absolute -left-[30px] top-[30px] w-4 h-4 rounded-full bg-green-500 border-4 border-[#161B22] animate-pulse" />
+              <span className="text-sm font-bold text-white">Current Status</span>
+              <span className="text-xs font-bold text-green-500 uppercase tracking-wider">Available</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* SolarBulk Promo */}
-      <div className="bg-gradient-to-r from-accent/10 to-secondary/10 border border-accent/20 rounded-lg p-8">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="text-xl font-semibold text-foreground mb-2">SolarBulk</h3>
-            <p className="text-muted-foreground mb-4">Join group purchase options for affordable solar solutions</p>
-            <Link href="/dashboard/solarbulk">
-              <Button>View SolarBulk</Button>
-            </Link>
+        {/* Reliability Score */}
+        <div className="bg-[#161B22] border border-[#1F2937] rounded-2xl p-6 md:p-8 flex flex-col justify-between">
+          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-6">
+            Reliability Score
+          </h3>
+          <div className="flex items-center gap-6">
+            <div className="relative w-20 h-20 shrink-0">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#2B303B" strokeWidth="8" />
+                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#22c55e" strokeWidth="8" strokeDasharray="251.2" strokeDashoffset={251.2 * (1 - 0.92)} strokeLinecap="round" />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-xl font-bold text-white">92%</span>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Top 5% reliability in Lagos Metropolis
+            </p>
           </div>
-          <Zap className="w-12 h-12 text-accent/50 hidden sm:block" />
         </div>
+
+        {/* Avg Daily Power */}
+        <div className="bg-[#161B22] border border-[#1F2937] rounded-2xl p-6 md:p-8 flex flex-col justify-between">
+          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-6">
+            Avg Daily Power
+          </h3>
+          <div>
+            <p className="text-4xl font-bold text-white mb-4">14.8 <span className="text-xl text-muted-foreground font-normal">hrs</span></p>
+            <div className="h-2 w-full bg-[#2B303B] rounded-full overflow-hidden">
+              <div className="h-full bg-primary w-[61%] rounded-full" />
+            </div>
+          </div>
+        </div>
+
+        {/* Weekly Outages */}
+        <div className="bg-[#161B22] border border-[#1F2937] rounded-2xl p-6 md:p-8">
+          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
+            Weekly Outages
+          </h3>
+          <div className="flex items-end gap-2 mb-6">
+            <span className="text-3xl font-bold text-white">2</span>
+            <span className="text-xs text-muted-foreground mb-1">Incidents in last 7 days</span>
+          </div>
+          <div className="flex items-end gap-2 h-12 w-full">
+            <div className="flex-1 bg-green-500/80 hover:bg-green-500 transition-colors rounded-t-sm h-full" />
+            <div className="flex-1 bg-green-500/80 hover:bg-green-500 transition-colors rounded-t-sm h-[80%]" />
+            <div className="flex-1 bg-green-500/80 hover:bg-green-500 transition-colors rounded-t-sm h-full" />
+            <div className="flex-1 bg-red-500/80 hover:bg-red-500 transition-colors rounded-t-sm h-[40%]" />
+            <div className="flex-1 bg-green-500/80 hover:bg-green-500 transition-colors rounded-t-sm h-[90%]" />
+            <div className="flex-1 bg-green-500/80 hover:bg-green-500 transition-colors rounded-t-sm h-full" />
+            <div className="flex-1 bg-red-500/80 hover:bg-red-500 transition-colors rounded-t-sm h-[30%]" />
+          </div>
+        </div>
+
+        {/* Monthly Trend */}
+        <div className="bg-[#161B22] border border-[#1F2937] rounded-2xl p-6 md:p-8">
+          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
+            Monthly Trend
+          </h3>
+          <div className="flex items-end gap-2 mb-6">
+            <span className="text-xl font-bold text-green-500 flex items-center gap-1">
+              <ArrowUpRight className="w-5 h-5" />
+              +12%
+            </span>
+            <span className="text-xs text-muted-foreground mb-0.5">Improvement from last month</span>
+          </div>
+          <div className="w-full h-12 relative overflow-hidden">
+            <svg viewBox="0 0 100 30" className="w-full h-full stroke-green-500 stroke-2 fill-none preserve-3d" preserveAspectRatio="none">
+              <path d="M 0 25 Q 10 20 20 25 T 40 20 T 60 25 T 80 10 T 100 5" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
       </div>
     </div>
-  )
-}
-
-function Users2(props: any) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-      <circle cx="9" cy="7" r="4"></circle>
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-    </svg>
   )
 }
