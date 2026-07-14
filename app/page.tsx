@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Phone, MessageCircle, Droplets, Map, Sparkles, Users, Zap, CheckCircle2, Home, Briefcase, Globe, BarChart3, ChevronRight } from 'lucide-react'
+import { ArrowRight, Phone, MessageCircle, Droplets, Map, Sparkles, Users, Zap, CheckCircle2, Home, Briefcase, Globe, BarChart3, ChevronRight, Sun } from 'lucide-react'
 import Link from 'next/link'
 
 export default function LandingPage() {
