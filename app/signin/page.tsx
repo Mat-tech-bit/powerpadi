@@ -13,6 +13,13 @@ import { z } from 'zod'
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { auth, db } from '@/lib/firebase'
+import dynamic from 'next/dynamic'
+
+const LiveMap = dynamic(() => import('@/components/LiveMap'), { ssr: false, loading: () => (
+  <div className="w-full h-full flex items-center justify-center bg-muted/20">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
+) })
 
 const signinSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -36,8 +43,22 @@ export default function SigninPage() {
     setIsLoading(true)
     setAuthError(null)
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password)
-      router.push('/dashboard')
+      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
+      const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid))
+      if (userDoc.exists()) {
+        const role = userDoc.data().role
+        if (!role || role === 'unassigned') {
+          router.push('/role-selection')
+        } else if (role === 'technician') {
+          router.push('/technician')
+        } else if (role === 'vendor') {
+          router.push('/vendor')
+        } else {
+          router.push('/dashboard')
+        }
+      } else {
+        router.push('/dashboard')
+      }
     } catch (error: any) {
       console.error('Signin error:', error)
       setAuthError('Invalid email or password.')
@@ -63,12 +84,22 @@ export default function SigninPage() {
           uid: user.uid,
           fullName: user.displayName || 'Google User',
           email: user.email,
-          role: 'resident', // default
+          role: 'unassigned', // needs to pick a role
           createdAt: new Date().toISOString()
         })
+        router.push('/role-selection')
+      } else {
+        const data = userDoc.data()
+        if (!data.role || data.role === 'unassigned') {
+          router.push('/role-selection')
+        } else if (data.role === 'technician') {
+          router.push('/technician')
+        } else if (data.role === 'vendor') {
+          router.push('/vendor')
+        } else {
+          router.push('/dashboard')
+        }
       }
-
-      router.push('/dashboard')
     } catch (error: any) {
       console.error('Google signin error:', error)
       setAuthError('Google sign-in failed. Please try again.')
@@ -188,8 +219,8 @@ export default function SigninPage() {
       </div>
 
       {/* Right Side - Dashboard Preview */}
-      <div className="hidden lg:flex lg:flex-1 lg:flex-col lg:items-center lg:justify-center bg-card border-l border-border px-8 py-12">
-        <div className="max-w-md space-y-8">
+      <div className="flex lg:flex-1 flex-col items-center justify-center bg-card border-t lg:border-t-0 lg:border-l border-border px-8 py-12">
+        <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="text-2xl font-bold text-foreground mb-2">Active Connection</h2>
             <p className="text-muted-foreground">Victoria Island, Hub</p>
@@ -206,10 +237,8 @@ export default function SigninPage() {
 
             <div>
               <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-3">LIVE POWER MAP</p>
-              <div className="bg-muted rounded-lg aspect-square flex items-center justify-center">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                  <div className="w-6 h-6 bg-primary rounded-full animate-pulse"></div>
-                </div>
+              <div className="bg-muted rounded-xl aspect-square overflow-hidden relative border border-border shadow-inner z-0">
+                <LiveMap />
               </div>
             </div>
 

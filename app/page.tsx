@@ -39,9 +39,9 @@ export default function LandingPage() {
           </div>
           
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-            <Link href="#" className="text-white">Features</Link>
-            <Link href="#" className="hover:text-white transition-colors">How it Works</Link>
-            <Link href="#" className="hover:text-white transition-colors">SolarBulk</Link>
+            <Link href="#features" className="hover:text-white transition-colors">Features</Link>
+            <Link href="#how-it-works" className="hover:text-white transition-colors">How it Works</Link>
+            <Link href="#solarbulk" className="hover:text-white transition-colors">SolarBulk</Link>
             <Link href="#" className="hover:text-white transition-colors">News</Link>
           </div>
 
@@ -137,7 +137,7 @@ export default function LandingPage() {
       </section>
 
       {/* Feature Grid */}
-      <section className="px-6 max-w-6xl mx-auto pb-32">
+      <section id="features" className="px-6 max-w-6xl mx-auto pb-32">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="grid md:grid-cols-3 gap-6">
           {/* Live Power Map */}
           <motion.div variants={fadeUp} className="md:col-span-2 bg-[#161B22] border border-[#1F2937] p-8 md:p-12 rounded-3xl relative overflow-hidden group">
@@ -191,7 +191,7 @@ export default function LandingPage() {
       </section>
 
       {/* How it Works */}
-      <section className="px-6 max-w-6xl mx-auto pb-32">
+      <section id="how-it-works" className="px-6 max-w-6xl mx-auto pb-32">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>
           <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold text-white mb-16 text-center">How it Works</motion.h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -300,7 +300,7 @@ export default function LandingPage() {
       </section>
 
       {/* SolarBulk CTA */}
-      <section className="px-6 max-w-6xl mx-auto py-32">
+      <section id="solarbulk" className="px-6 max-w-6xl mx-auto py-32">
         <motion.div 
           initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
           className="bg-[#161B22] border border-[#1F2937] rounded-[2rem] p-8 md:p-16 flex flex-col lg:flex-row items-center gap-12 relative overflow-hidden group"
@@ -394,27 +394,27 @@ export default function LandingPage() {
               <div>
                 <h4 className="font-bold text-white mb-6 uppercase text-xs tracking-wider">Platform</h4>
                 <ul className="space-y-4 text-sm text-muted-foreground">
-                  <li><Link href="#" className="hover:text-primary transition-colors">Features</Link></li>
-                  <li><Link href="#" className="hover:text-primary transition-colors">Live Map</Link></li>
-                  <li><Link href="#" className="hover:text-primary transition-colors">Predictions</Link></li>
+                  <li><Link href="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+                  <li><Link href="/signin" className="hover:text-primary transition-colors">Live Map</Link></li>
+                  <li><Link href="/signin" className="hover:text-primary transition-colors">Predictions</Link></li>
                 </ul>
               </div>
               
               <div>
                 <h4 className="font-bold text-white mb-6 uppercase text-xs tracking-wider">Company</h4>
                 <ul className="space-y-4 text-sm text-muted-foreground">
-                  <li><Link href="#" className="hover:text-primary transition-colors">About Us</Link></li>
-                  <li><Link href="#" className="hover:text-primary transition-colors">Contact Us</Link></li>
-                  <li><Link href="#" className="hover:text-primary transition-colors">Careers</Link></li>
+                  <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+                  <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+                  <li><Link href="/about" className="hover:text-primary transition-colors">Careers</Link></li>
                 </ul>
               </div>
               
               <div className="col-span-2 sm:col-span-1">
                 <h4 className="font-bold text-white mb-6 uppercase text-xs tracking-wider">Legal</h4>
                 <ul className="space-y-4 text-sm text-muted-foreground">
-                  <li><Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-                  <li><Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-                  <li><Link href="#" className="hover:text-primary transition-colors">Twitter</Link></li>
+                  <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                  <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+                  <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Twitter</a></li>
                 </ul>
               </div>
             </div>
